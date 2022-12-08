@@ -3,12 +3,73 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Pendulum Simulator</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-image: linear-gradient(
+          90deg,
+          rgb(94, 169, 212),
+          rgb(221, 120, 154)
+        );
+      }
+
+      canvas {
+        border: 1px solid black;
+        background-color: white;
+        border-radius: 5px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin: 10px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      form * {
+        margin-top: 5px;
+      }
+
+      input {
+        border-radius: 5px;
+      }
+
+      .gridContainer {
+        display: grid;
+        grid-template-columns: 1005px auto;
+      }
+    </style>
   </head>
+
   <body>
     <main>
       <div id="timeDiv"></div>
     </main>
+
+    <h1>Hello World!</h1>
+
+    <div class="gridContainer">
+      <canvas id="canvas" width="1000" height="800"></canvas>
+
+      <form>
+        <div>
+          angularOffset: <input type="number" id="" placeholder="0<x<90°" />
+        </div>
+        <div>
+          stringLength: <input type="number" id="" placeholder="0<x<800" />
+        </div>
+        <div>
+          xCoordinate: <input type="number" id="" placeholder="0<x<1000" />
+        </div>
+      </form>
+    </div>
 
     <script>
       const timeDiv = document.querySelector("#timeDiv");
@@ -22,6 +83,43 @@
       }, 2000);
 
       myFunction();
+    </script>
+
+    <script>
+      function objects(element, ctx) {
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.moveTo(200, 0);
+        ctx.lineTo(200, 190);
+        ctx.closePath();
+        ctx.strokeStyle = "#a29376";
+        ctx.stroke();
+        //circle 01
+        ctx.beginPath();
+        ctx.arc(200, 225, 35, 0, 360);
+        ctx.fillStyle = "#828386";
+        ctx.fill();
+      }
+
+      var rotation = Math.PI / 180,
+        translation = -3.5,
+        counter = 0;
+      function draw() {
+        var element = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, element.width, element.height);
+        ctx.translate(0, translation);
+        ctx.rotate(rotation);
+        objects(element, ctx);
+        if (counter == 25) {
+          rotation *= -1;
+          translation *= -1;
+          counter = -25;
+        }
+        counter += 1;
+        window.requestAnimationFrame(draw);
+      }
+      window.onload = draw;
     </script>
   </body>
 </html>
