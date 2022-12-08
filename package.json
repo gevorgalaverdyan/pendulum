@@ -5,15 +5,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
-    "server": "nodemon backend/server.js"
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix views",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "gevorg alaverdyan",
   "license": "MIT",
   "dependencies": {
+    "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
-    "mongoose": "^6.8.0"
+    "mongoose": "^6.8.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
