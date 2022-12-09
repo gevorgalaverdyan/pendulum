@@ -7,6 +7,7 @@
     <title>Pendulum Simulator</title>
     <style>
       body {
+        margin-top: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -45,18 +46,18 @@
         display: grid;
         grid-template-columns: 1005px auto;
       }
+
+      h3 {
+        margin-top: 9px;
+      }
     </style>
   </head>
 
   <body>
-    <main>
-      <div id="timeDiv"></div>
-    </main>
-
-    <h1>Hello World!</h1>
+    <h3>Simple Pendulum</h3>
 
     <div class="gridContainer">
-      <canvas id="canvas" width="1000" height="800"></canvas>
+      <canvas id="canvas" width="1000" height="550"></canvas>
 
       <form>
         <div>
@@ -72,41 +73,31 @@
     </div>
 
     <script>
-      const timeDiv = document.querySelector("#timeDiv");
-
-      function myFunction() {
-        timeDiv.innerHTML = new Date();
-      }
-
-      var interval = setInterval(function () {
-        myFunction();
-      }, 2000);
-
-      myFunction();
-    </script>
-
-    <script>
       function objects(element, ctx) {
         ctx.beginPath();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 5;
+        //move to x=200
         ctx.moveTo(200, 0);
+        //draw line from (200,0) to (200,190)
         ctx.lineTo(200, 190);
         ctx.closePath();
         ctx.strokeStyle = "#a29376";
         ctx.stroke();
         //circle 01
         ctx.beginPath();
+        //arc(x, y, radius, startAngle, endAngle)
         ctx.arc(200, 225, 35, 0, 360);
         ctx.fillStyle = "#828386";
         ctx.fill();
       }
 
-      var rotation = Math.PI / 180,
+      let rotation = Math.PI / 180,
         translation = -3.5,
         counter = 0;
+
       function draw() {
-        var element = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
+        let element = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, element.width, element.height);
         ctx.translate(0, translation);
         ctx.rotate(rotation);
