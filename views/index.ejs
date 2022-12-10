@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+
     <title>Pendulum Simulator</title>
     <style>
       body {
@@ -30,7 +30,6 @@
         flex-direction: column;
         width: fit-content;
         margin: 10px;
-        align-items: center;
         justify-content: center;
       }
 
@@ -59,7 +58,7 @@
     <div class="gridContainer">
       <canvas id="canvas" width="1000" height="550"></canvas>
 
-      <form>
+      <form method="post" action="/api/pendulums" id="pendulumForm">
         <div>
           angularOffset: <input type="number" id="" placeholder="0<x<90°" />
         </div>
@@ -68,6 +67,9 @@
         </div>
         <div>
           xCoordinate: <input type="number" id="" placeholder="0<x<1000" />
+        </div>
+        <div>
+          <button type="submit">Submit</button>
         </div>
       </form>
     </div>
@@ -111,6 +113,30 @@
         window.requestAnimationFrame(draw);
       }
       window.onload = draw;
+
+      const form = document.getElementById("pendulumForm");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const angularOffset = form.elements[0].value;
+        const stringLength = form.elements[1].value;
+        const xCoordinate = form.elements[2].value;
+
+        if (!angularOffset || !stringLength || !xCoordinate) {
+          window.alert("Missing input");
+          return;
+        }
+
+        let data = { angularOffset, stringLength, xCoordinate };
+
+        fetch("/api/pendulums", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }).then((res) => {
+          console.log("Request complete! response:", res);
+        });
+      });
     </script>
   </body>
 </html>
