@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.set("../views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 
+//send data here
 app.get("/", (req, res) => {
   const time = new Date();
   res.render('index', {time: time})
@@ -27,3 +28,13 @@ app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}`);
 });
 
+
+////////////////////////
+
+//send requests from here
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.write('Hello World!');
+  res.end();
+}).listen(8000);
