@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.set("../views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 
-//send data here
+//send GET data here
 app.get("/simulation", (req, res) => {
   res.render("index");
 });
@@ -33,8 +33,7 @@ app.listen(PORT, () => {
 
 ////////////////////////
 
-//send requests from here
-
+//send POST requests from here
 app.get("/", (req, res) => {
   res.render("config");
 });
