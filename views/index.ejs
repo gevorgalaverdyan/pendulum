@@ -11,10 +11,18 @@
   <body>
     <h3>Simple Pendulum</h3>
 
-    <div class="gridContainer">
+    <!-- <div class="gridContainer">
       <canvas id="canvas" width="1000" height="550"></canvas>
-    </div>
+    </div> -->
 
+    <form method="get" action="/api/pendulums" >
+      <button type="submit">Start</button>
+    </form>
+
+    <form method="get" action="/api/pendulums" >
+      <button type="submit">Stop</button>
+    </form>
+   
     <script>
       function objects(element, ctx) {
         ctx.beginPath();

@@ -1,5 +1,5 @@
-const asyncHandler = require("express-async-handler");
-const Pendulum = require("../models/pendulumModel");
+const asyncHandler = require('express-async-handler');
+const Pendulum = require('../models/pendulumModel');
 
 //@desc register pendulum
 //@route /api/pendulums
@@ -8,7 +8,7 @@ const registerPendulum = asyncHandler(async (req, res) => {
 
   if (!angularOffset || !stringLength || !xCoordinate) {
     res.status(400);
-    throw new Error("Missing fields");
+    throw new Error('Missing fields');
   }
 
   const pendulum = await Pendulum.create({
@@ -26,8 +26,30 @@ const registerPendulum = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("invalid data");
+    throw new Error('invalid data');
   }
 });
 
-module.exports = registerPendulum;
+//@desc register pendulum
+//@route /api/pendulums
+const getPendulums = asyncHandler(async (req, res) => {
+  const pendulums = await Pendulum.find();
+
+  if (!pendulums) {
+    throw new Error('No pendulums in DB');
+  }
+
+  const pendulumsList = [];
+  pendulums.forEach((x) =>
+    pendulumsList.push({
+      id: x._id,
+      angularOffset: x.angularOffset,
+      stringLength: x.stringLength,
+      xCoordinate: x.xCoordinate,
+    })
+  );
+
+  res.status(200).json(pendulumsList);
+});
+
+module.exports = { registerPendulum, getPendulums };

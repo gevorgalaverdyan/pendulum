@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 8080;
 const errorHandler = require("./middleware/errorMiddleware");
 const path = require("path");
+const { getPendulums } = require("./controllers/pendulumController");
 connectDB();
 
 const app = express();
@@ -37,3 +38,4 @@ app.listen(PORT, () => {
 app.get("/", (req, res) => {
   res.render("config");
 });
+

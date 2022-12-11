@@ -1,19 +1,19 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose } = require('mongoose');
 
 const pendulumSchema = mongoose.Schema(
   {
     angularOffset: {
       type: Number,
-      required: [true, "Please add angularOffset"],
+      required: [true, 'Please add angularOffset'],
     },
     stringLength: {
       type: Number,
-      required: [true, "Please add stringLength"],
+      required: [true, 'Please add stringLength'],
     },
     xCoordinate: {
       type: Number,
-      required: [true, "Please add xCoordinate"],
-    }
+      required: [true, 'Please add xCoordinate'],
+    },
   },
   { timestamps: true }
 );

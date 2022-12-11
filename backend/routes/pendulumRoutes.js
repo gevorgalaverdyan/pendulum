@@ -1,7 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const registerPendulum = require('../controllers/pendulumController')
+const {
+  registerPendulum,
+  getPendulums,
+} = require('../controllers/pendulumController');
 
-router.post("/", registerPendulum);
+router.post('/', registerPendulum);
+
+router.get('/', getPendulums);
 
 module.exports = router;

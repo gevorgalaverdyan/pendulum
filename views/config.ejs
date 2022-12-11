@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Configs</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/style.css" />
   </head>
 
   <body>
     <h3>Simple Pendulum</h3>
 
-    <form method="post" action="/api/pendulums" id="pendulumForm">
+    <form id="pendulumForm">
       <div>
         angularOffset: <input type="number" id="" placeholder="0<x<90°" />
       </div>
@@ -27,28 +27,28 @@
     </form>
 
     <script>
-      const form = document.getElementById("pendulumForm");
+      const form = document.getElementById('pendulumForm');
 
-      form.addEventListener("submit", (event) => {
+      form.addEventListener('submit', (event) => {
         event.preventDefault();
-        const angularOffset = form.elements[0].value;
+        let angularOffset = form.elements[0].value;
         const stringLength = form.elements[1].value;
         const xCoordinate = form.elements[2].value;
 
         if (!angularOffset || !stringLength || !xCoordinate) {
-          window.alert("Missing input");
+          window.alert('Missing input');
           return;
         }
 
         let data = { angularOffset, stringLength, xCoordinate };
 
-        fetch("/api/pendulums", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        fetch('/api/pendulums', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
-        }).then((res) => {
-          console.log("Request complete! response:", res);
-        });
+        })
+          .then(form.reset())
+          .then(window.alert('Request complete! response:'));
       });
     </script>
   </body>
