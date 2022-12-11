@@ -5,51 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Pendulum Simulator</title>
-    <style>
-      body {
-        margin-top: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-image: linear-gradient(
-          90deg,
-          rgb(94, 169, 212),
-          rgb(221, 120, 154)
-        );
-      }
-
-      canvas {
-        border: 1px solid black;
-        background-color: white;
-        border-radius: 5px;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-        margin: 10px;
-        justify-content: center;
-      }
-
-      form * {
-        margin-top: 5px;
-      }
-
-      input {
-        border-radius: 5px;
-      }
-
-      .gridContainer {
-        display: grid;
-        grid-template-columns: 1005px auto;
-      }
-
-      h3 {
-        margin-top: 9px;
-      }
-    </style>
+    <link rel="stylesheet" href="styles/style.css" />
   </head>
 
   <body>
@@ -57,21 +13,6 @@
 
     <div class="gridContainer">
       <canvas id="canvas" width="1000" height="550"></canvas>
-
-      <form method="post" action="/api/pendulums" id="pendulumForm">
-        <div>
-          angularOffset: <input type="number" id="" placeholder="0<x<90°" />
-        </div>
-        <div>
-          stringLength: <input type="number" id="" placeholder="0<x<800" />
-        </div>
-        <div>
-          xCoordinate: <input type="number" id="" placeholder="0<x<1000" />
-        </div>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
     </div>
 
     <script>
@@ -113,30 +54,6 @@
         window.requestAnimationFrame(draw);
       }
       window.onload = draw;
-
-      const form = document.getElementById("pendulumForm");
-
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const angularOffset = form.elements[0].value;
-        const stringLength = form.elements[1].value;
-        const xCoordinate = form.elements[2].value;
-
-        if (!angularOffset || !stringLength || !xCoordinate) {
-          window.alert("Missing input");
-          return;
-        }
-
-        let data = { angularOffset, stringLength, xCoordinate };
-
-        fetch("/api/pendulums", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }).then((res) => {
-          console.log("Request complete! response:", res);
-        });
-      });
     </script>
   </body>
 </html>
