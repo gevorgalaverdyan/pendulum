@@ -52,4 +52,10 @@ const getPendulums = asyncHandler(async (req, res) => {
   res.status(200).json(pendulumsList);
 });
 
-module.exports = { registerPendulum, getPendulums };
+const deletePendulums = asyncHandler(async (req, res) => {
+  await Pendulum.deleteMany({});
+
+  res.status(200).json({ success: true });
+});
+
+module.exports = { registerPendulum, getPendulums, deletePendulums };

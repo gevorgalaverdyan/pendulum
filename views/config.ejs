@@ -27,11 +27,12 @@
     </form>
 
     <script>
+      //POST
       const form = document.getElementById('pendulumForm');
 
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        let angularOffset = form.elements[0].value;
+        const angularOffset = form.elements[0].value;
         const stringLength = form.elements[1].value;
         const xCoordinate = form.elements[2].value;
 
