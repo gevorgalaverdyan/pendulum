@@ -16,22 +16,134 @@
     </div>
 
     <form id="startForm">
-      <button type="submit">Start</button>
+      <button type="submit">Start/Resume</button>
     </form>
 
     <form id="stopForm">
       <button type="submit">Stop</button>
     </form>
 
+    <form id="pauseForm">
+      <button type="submit">Pause</button>
+    </form>
+
     <script>
+      let pauseData = [
+        //p1
+        {
+          pausedX: 0,
+          pausedY: 0,
+        },
+        //p2
+        {
+          pausedX: 0,
+          pausedY: 0,
+        },
+        //p3
+        {
+          pausedX: 0,
+          pausedY: 0,
+        },
+        //p4
+        {
+          pausedX: 0,
+          pausedY: 0,
+        },
+        //p5
+        {
+          pausedX: 0,
+          pausedY: 0,
+        },
+      ];
+
+      function PendulumSim(
+        length_m,
+        gravity_mps2,
+        initialAngle_rad,
+        timestep_ms,
+        callback
+      ) {
+        let velocity = 0;
+        let angle = initialAngle_rad;
+        let k = -gravity_mps2 / length_m;
+        let timestep_s = timestep_ms / 1000;
+
+        //every timestep_s call this function to get the new calculated angle
+        return setInterval(function () {
+          const acceleration = k * Math.sin(angle);
+          velocity += acceleration * timestep_s;
+          angle += velocity * timestep_s;
+          callback(angle);
+        }, timestep_ms);
+      }
+
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+      let prev = 0;
+
       //GET -> START
       const startForm = document.querySelector('#startForm');
 
       startForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const resp = await getPendulums();
-        console.log(resp);
+        const res = await getPendulums();
+        console.log(res);
+
+        const angleCoefficient = 5 / 9; // because 100 =  180 degrees, so this conversion coeffiecent works similar to converting  numbers to degrees
+        let i = 10;
+
+        res.map((element) => {
+          console.log(element);
+          const { angularOffset, stringLength, xCoordinate } = element;
+          console.log(angularOffset, stringLength, xCoordinate);
+
+          PendulumSim(
+            1, // speed
+            9.80665, // gravity
+            (Math.PI * angularOffset * angleCoefficient) / 100,
+            i++, //for callback frames
+            function (angle) {
+              const rPend = stringLength; // bar length
+              const rBall = 25; // ball radius
+              const rBar = 3; // bar width
+              ///Ball position
+              const ballX = Math.sin(angle) * rPend;
+              const ballY = Math.cos(angle) * rPend;
+
+              //  sin k = opp/hyp = ballX/rPend
+              //  cos k = adj/hyp = ballY/rPend
+
+              // ballX: opp = sin k * hyp
+
+              //         /|
+              //   hyp  / | ballY
+              //       /__|
+              //      ballX
+
+              context.fillStyle = 'rgba(255,255,255,0.51)';
+              context.fillRect(0, 0, canvas.width, canvas.height);
+              context.fillStyle = 'grey';
+              context.strokeStyle = 'rgba(0,0,0)';
+
+              context.save();
+              context.translate(xCoordinate, 0);
+              context.rotate(angle);
+
+              context.beginPath();
+              context.rect(-rBar, -rBar, rBar * 2, rPend + rBar * 2);
+              context.fill();
+              context.stroke();
+
+              context.beginPath();
+              context.arc(0, rPend, rBall, 0, Math.PI * 2, false);
+              context.fill();
+              context.stroke();
+              context.restore();
+              prev = angle;
+            }
+          );
+        });
       });
 
       const getPendulums = async () => {
@@ -60,6 +172,20 @@
       });
 
       //UPDATE -> PAUSE
+      const pauseForm = document.querySelector('#pauseForm');
+      pauseForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        //let data = { angularOffset, stringLength, xCoordinate };
+
+        fetch('/api/pendulums', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const data = await res.json();
+      });
     </script>
   </body>
 </html>
