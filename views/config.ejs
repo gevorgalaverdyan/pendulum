@@ -24,6 +24,10 @@
       <div>
         <button type="submit" class="button">Submit</button>
       </div>
+
+      <div>
+        <button id="viewBtn">View Simulation</button>
+      </div>
     </form>
 
     <script>
@@ -52,6 +56,13 @@
           .then(window.alert('Request complete! response:'))
           .catch(window.alert('POST ERROR'));
       });
+
+      const viewBtn = document.querySelector('#viewBtn');
+
+      viewBtn.addEventListener('click', (event)=>{
+        event.preventDefault();
+        window.location.href = window.location.href+"simulation"
+      })
     </script>
   </body>
 </html>
