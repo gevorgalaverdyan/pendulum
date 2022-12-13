@@ -14,6 +14,12 @@ const pendulumSchema = mongoose.Schema(
       type: Number,
       required: [true, 'Please add xCoordinate'],
     },
+    pausedX: {
+      type: Number,
+    },
+    pausedY: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
