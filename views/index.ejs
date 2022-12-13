@@ -20,42 +20,12 @@
     </form>
 
     <form id="stopForm">
-      <button type="submit">Stop</button>
+      <button type="submit">Stop(Clear DB)</button>
     </form>
 
-    <form id="pauseForm">
-      <button type="submit">Pause/Resume</button>
-    </form>
+    <button id="pauseForm">Pause/Resume</button>
 
     <script>
-      let pauseData = [
-        //p1
-        {
-          pausedX: 0,
-          pausedY: 0,
-        },
-        //p2
-        {
-          pausedX: 0,
-          pausedY: 0,
-        },
-        //p3
-        {
-          pausedX: 0,
-          pausedY: 0,
-        },
-        //p4
-        {
-          pausedX: 0,
-          pausedY: 0,
-        },
-        //p5
-        {
-          pausedX: 0,
-          pausedY: 0,
-        },
-      ];
-
       function PendulumSim(
         length_m,
         gravity_mps2,
@@ -172,19 +142,22 @@
       });
 
       //UPDATE -> PAUSE
+
       const pauseForm = document.querySelector('#pauseForm');
-      pauseForm.addEventListener('submit', async (event) => {
+
+      pauseForm.addEventListener('click', async (event) => {
         event.preventDefault();
-
         //let data = { angularOffset, stringLength, xCoordinate };
+        console.log("pause")
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-        fetch('/api/pendulums', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+        // fetch('/api/pendulums', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(data),
+        // });
 
-        const data = await res.json();
+        // const data = await res.json();
       });
     </script>
   </body>
