@@ -42,7 +42,7 @@ const getPendulums = asyncHandler(async (req, res) => {
   const pendulumsList = [];
   pendulums.forEach((x) =>
     pendulumsList.push({
-      id: x._id,
+      _id: x._id,
       angularOffset: x.angularOffset,
       stringLength: x.stringLength,
       xCoordinate: x.xCoordinate,
@@ -61,27 +61,38 @@ const deletePendulums = asyncHandler(async (req, res) => {
 });
 
 const updatePendulums = asyncHandler(async (req, res) => {
-  const { angularOffset, stringLength, xCoordinate, pausedX, pausedY } = req.body;
+  let pausedPendulumsList = [];
 
-  if (!angularOffset || !stringLength || !xCoordinate || !pausedX || !pausedY) {
+  if (!req.body) {
     res.status(400);
-    throw new Error('Missing fields');
+    throw new Error('Missing req.body for update pendulums');
   }
 
-  const pasedPendulums = {}
+  for (let index = 0; index < req.body.length; index++) {
+    const pendulum = req.body[index];
+    const { _id, pausedX, pausedAngle } = pendulum;
 
-  if (pendulum) {
-    res.status(201).json({
-      _id: pendulum.id,
-      angularOffset: pendulum.angularOffset,
-      stringLength: pendulum.stringLength,
-      xCoordinate: pendulum.xCoordinate,
+    if (!_id || !pausedX || !pausedAngle) {
+      res.status(400);
+      throw new Error('Missing fields');
+    }
+
+    const updatedPendulum = await Pendulum.findByIdAndUpdate(_id, {
+      pausedX: pausedX,
+      pausedAngle: pausedAngle,
     });
-  } else {
-    res.status(400);
-    throw new Error('invalid data');
+
+    pausedPendulumsList.push({
+      updatedPendulum,
+    });
   }
+
+  res.status(200).json({ pausedPendulumsList: pausedPendulumsList });
 });
 
-
-module.exports = { registerPendulum, getPendulums, deletePendulums };
+module.exports = {
+  registerPendulum,
+  getPendulums,
+  deletePendulums,
+  updatePendulums,
+};

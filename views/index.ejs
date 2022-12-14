@@ -25,7 +25,28 @@
 
     <button id="pauseForm">Pause/Resume</button>
 
+    <h4>Polled Location</h4>
+    <textarea
+      id="polledTextArea"
+      cols="100"
+      rows="30"
+      style="
+        border-radius: 5px;
+        border: 3px black dashed;
+        background-color: white;
+      "
+      disabled
+      placeholder="Polled Data will be displayed here..."
+    ></textarea>
     <script>
+      const API_URL = '/api/pendulums';
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+      let prev = 0;
+      let simStarted = false;
+
+      let pausedPositions = [];
+
       function PendulumSim(
         length_m,
         gravity_mps2,
@@ -47,10 +68,6 @@
         }, timestep_ms);
       }
 
-      const canvas = document.getElementById('canvas');
-      const context = canvas.getContext('2d');
-      let prev = 0;
-
       //GET -> START
       const startForm = document.querySelector('#startForm');
 
@@ -58,18 +75,25 @@
         event.preventDefault();
 
         const res = await getPendulums();
-        console.log(res);
+        console.log('GET response: ', res);
 
         const angleCoefficient = 5 / 9; // because 100 =  180 degrees, so this conversion coeffiecent works similar to converting  numbers to degrees
         let i = 10;
 
+        let counter = 0;
+        isTrue = true;
         res.map((element) => {
-          console.log(element);
-          const { angularOffset, stringLength, xCoordinate } = element;
-          console.log(angularOffset, stringLength, xCoordinate);
+          const { _id, angularOffset, stringLength, xCoordinate } = element;
+          pausedPositions.push({
+            _id: _id,
+            pausedX: 0,
+            pausedAngle: 0,
+          });
+
+          let item = pausedPositions.find((element) => element._id === _id);
 
           PendulumSim(
-            1, // speed
+            0.5, // speed
             9.80665, // gravity
             (Math.PI * angularOffset * angleCoefficient) / 100,
             i++, //for callback frames
@@ -111,18 +135,30 @@
               context.stroke();
               context.restore();
               prev = angle;
+
+              let realLocation = ballX;
+
+              if (ballX < 0) {
+                realLocation *= -1;
+              } else if (ballX > 0) {
+                realLocation = xCoordinate - realLocation;
+              }
+
+              item.pausedX = realLocation;
+              item.pausedAngle = (angle * 180) / Math.PI; //convert to degrees
             }
           );
         });
       });
 
       const getPendulums = async () => {
-        const res = await fetch('/api/pendulums', {
+        const res = await fetch(API_URL, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });
 
         const data = await res.json();
+        simStarted = true;
         return data;
       };
 
@@ -132,33 +168,62 @@
       stopForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const res = await fetch('/api/pendulums', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-        });
+        if (window.confirm('Do you want to clear the DB?')) {
+          const res = await fetch(API_URL, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+          });
 
-        const data = await res.json();
-        window.alert(data.success ? 'Collection DELETED' : 'ERROR');
+          const data = await res.json();
+          window.alert(data.success ? 'Collection DELETED' : 'ERROR');
+        }
       });
 
       //UPDATE -> PAUSE
 
       const pauseForm = document.querySelector('#pauseForm');
+      const polledTextArea = document.querySelector('#polledTextArea');
 
       pauseForm.addEventListener('click', async (event) => {
         event.preventDefault();
-        //let data = { angularOffset, stringLength, xCoordinate };
-        console.log("pause")
-        context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // fetch('/api/pendulums', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(data),
-        // });
+        const data = await updatePendulums();
 
-        // const data = await res.json();
+        polledTextArea.innerHTML +=
+          '\nPolled by CLICK\n\n' +
+          JSON.stringify(data.pausedPendulumsList) +
+          '\n';
       });
+
+      const updatePendulums = async () => {
+        const res = await fetch(API_URL, {
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(pausedPositions),
+        });
+
+        const data = await res.json();
+        return data;
+      };
+
+
+      async function poll() {
+        timer = setInterval(async function () {
+          console.log('Polling(in 5 sec)...')
+          const data = await updatePendulums();
+
+          simStarted
+            ? (polledTextArea.innerHTML +=
+                '\nPolling(in 5 sec)...\n' +
+                JSON.stringify(data.pausedPendulumsList) +
+                '\n')
+            : null;
+        }, 5000);
+      }
+
+      poll();
     </script>
   </body>
 </html>
