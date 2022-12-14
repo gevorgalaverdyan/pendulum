@@ -53,16 +53,15 @@
           body: JSON.stringify(data),
         })
           .then(form.reset())
-          .then(window.alert('Request complete! response:'))
-          .catch(window.alert('POST ERROR'));
+          .then(window.alert('Request complete!'));
       });
 
       const viewBtn = document.querySelector('#viewBtn');
 
-      viewBtn.addEventListener('click', (event)=>{
+      viewBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        window.location.href = window.location.href+"simulation"
-      })
+        window.location.href = window.location.href + 'simulation';
+      });
     </script>
   </body>
 </html>

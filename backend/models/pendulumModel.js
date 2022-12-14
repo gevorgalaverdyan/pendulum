@@ -17,7 +17,7 @@ const pendulumSchema = mongoose.Schema(
     pausedX: {
       type: Number,
     },
-    pausedY: {
+    pausedAngle: {
       type: Number,
     },
   },
