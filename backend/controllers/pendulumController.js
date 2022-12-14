@@ -36,6 +36,7 @@ const getPendulums = asyncHandler(async (req, res) => {
   const pendulums = await Pendulum.find();
 
   if (!pendulums) {
+    res.status(400);
     throw new Error('No pendulums in DB');
   }
 
@@ -55,6 +56,12 @@ const getPendulums = asyncHandler(async (req, res) => {
 //@desc DELETE pendulums, called when clicked stop btn
 //@route /api/pendulums
 const deletePendulums = asyncHandler(async (req, res) => {
+  const count = await Pendulum.collection.countDocuments();
+
+  if (!count || count < 0) {
+    res.status(204).json({ success: false });
+  }
+
   await Pendulum.deleteMany({});
 
   res.status(200).json({ success: true });
