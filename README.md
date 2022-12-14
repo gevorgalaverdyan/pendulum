@@ -36,7 +36,7 @@ Project's concepts and technologies include:
     </tr>
     <tr>
         <td>[HttpPost] Creates a new command, returns the new pendulum with status code of "201 Created"</td>
-        <td><img src="./imgs/POST.png"/></td>  
+        <td><img src="./imgs/post.png"/></td>  
     </tr>
 </table>
 
