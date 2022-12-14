@@ -23,6 +23,6 @@ Project's concepts and technologies include:
 <hr>
 <table>
     <tr>
-        <td><img src="/imgs/endpoints.png"/></td>
+        <td><img src="./imgs/endpoints.png"/></td>
     </tr>
 </table>
