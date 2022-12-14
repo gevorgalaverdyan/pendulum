@@ -47,7 +47,7 @@
 
         let data = { angularOffset, stringLength, xCoordinate };
 
-        fetch('/api/pendulums', {
+        await fetch('/api/pendulums', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

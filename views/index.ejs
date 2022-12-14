@@ -49,14 +49,14 @@
 
       function PendulumSim(
         length_m,
-        gravity_mps2,
+        gravity,
         initialAngle_rad,
         timestep_ms,
         callback
       ) {
         let velocity = 0;
         let angle = initialAngle_rad;
-        let k = -gravity_mps2 / length_m;
+        let k = -gravity / length_m;
         let timestep_s = timestep_ms / 1000;
 
         //every timestep_s call this function to get the new calculated angle
